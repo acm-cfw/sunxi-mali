@@ -26,7 +26,7 @@
 
 /* Khronos platform-specific types and definitions.
  *
- * $Revision: 7820 $ on $Date: 2009-04-03 13:46:26 -0700 (Fri, 03 Apr 2009) $
+ * $Revision: 23298 $ on $Date: 2013-09-30 17:07:13 -0700 (Mon, 30 Sep 2013) $
  *
  * Adopters may modify this file to suit their platform. Adopters are
  * encouraged to submit platform specific modifications to the Khronos
@@ -112,7 +112,7 @@
  * name in the function prototype.
  */
 #if defined(_WIN32) && !defined(_WIN32_WCE) && !defined(__SCITECH_SNAP__)
-    /* Win32 but not WinCE */
+/* Win32 but not WinCE */
 #   define KHRONOS_APIENTRY __stdcall
 #else
 #   define KHRONOS_APIENTRY
@@ -221,10 +221,23 @@ typedef signed   char          khronos_int8_t;
 typedef unsigned char          khronos_uint8_t;
 typedef signed   short int     khronos_int16_t;
 typedef unsigned short int     khronos_uint16_t;
+
+/*
+ * Types that differ between LLP64 and LP64 architectures - in LLP64,
+ * pointers are 64 bits, but 'long' is still 32 bits. Win64 appears
+ * to be the only LLP64 architecture in current use.
+ */
+#ifdef _WIN64
+typedef signed   long long int khronos_intptr_t;
+typedef unsigned long long int khronos_uintptr_t;
+typedef signed   long long int khronos_ssize_t;
+typedef unsigned long long int khronos_usize_t;
+#else
 typedef signed   long  int     khronos_intptr_t;
 typedef unsigned long  int     khronos_uintptr_t;
 typedef signed   long  int     khronos_ssize_t;
 typedef unsigned long  int     khronos_usize_t;
+#endif
 
 #if KHRONOS_SUPPORT_FLOAT
 /*
@@ -260,10 +273,11 @@ typedef khronos_int64_t        khronos_stime_nanoseconds_t;
  * Values other than zero should be considered to be true.  Therefore
  * comparisons should not be made against KHRONOS_TRUE.
  */
-typedef enum {
-    KHRONOS_FALSE = 0,
-    KHRONOS_TRUE  = 1,
-    KHRONOS_BOOLEAN_ENUM_FORCE_SIZE = KHRONOS_MAX_ENUM
+typedef enum
+{
+	KHRONOS_FALSE = 0,
+	KHRONOS_TRUE  = 1,
+	KHRONOS_BOOLEAN_ENUM_FORCE_SIZE = KHRONOS_MAX_ENUM
 } khronos_boolean_enum_t;
 
 #endif /* __khrplatform_h_ */
